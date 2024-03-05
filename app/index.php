@@ -1,8 +1,8 @@
 
-<?php echo "test"; exit(); ?>
+<?php $a = 1; $b=2; if($a<$b){ echo "success";?>
 
 
-
+<?php }else{ ?>
 <?php
 session_start();
 error_reporting(0);
@@ -315,3 +315,5 @@ while ($row=mysqli_fetch_array($ret)) {
       <!-- //bootstrap working-->
    </body>
 </html>
+
+<?php }?>
