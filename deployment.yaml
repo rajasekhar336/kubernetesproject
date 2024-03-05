@@ -38,3 +38,28 @@ spec:
   type: NodePort
   selector:
     app.kubernetes.io/name: php-app
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: php-app
+  name: ingress-php-app
+  annotations:
+    alb.ingress.kubernetes.io/certificate-arn: " "
+    alb.ingress.kubernetes.io/healthcheck-path: "/"
+    alb.ingress.kubernetes.io/subnets: "subnet-09c64fc05269ed06b,subnet-subnet-084b671d320788c6d"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  ingressClassName: alb
+  rules:
+    - host: "*.amazonaws.com"
+    - http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: php-app
+              port:
+                number: 80
