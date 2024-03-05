@@ -22,12 +22,12 @@ pipeline {
                 echo 'Empty'
             }
         }
-        stage('Docker push to ECR') {
+        stage('Pull Docker Image from ECR') {
             steps {
                 script {
-                    docker.withRegistry('https://730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack', 'ecr:ap-south-1:AWS_CRED') {
-                    app.push("${env.BUILD_NUMBER}")
-                    app.push("latest") 
+                    withCredentials([aws(credentialsId: 'AWS_CRED', region: 'ap-south-1')]) {
+                        sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin 730335550052.dkr.ecr.${AWS_REGION}.amazonaws.com"
+                        sh "docker pull 730335550052.dkr.ecr.${AWS_REGION}.amazonaws.com/:latest"
                     }
                 }
             }
