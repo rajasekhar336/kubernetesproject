@@ -7,7 +7,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: php-app
-  name: deployment-php
+  name: php-php
 spec:
   selector:
     matchLabels:
@@ -43,7 +43,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: php-app
-  name: ingress-php-app
+  name: php-app
   annotations:
     alb.ingress.kubernetes.io/certificate-arn: " "
     alb.ingress.kubernetes.io/healthcheck-path: "/"
