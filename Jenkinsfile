@@ -24,7 +24,7 @@ pipeline {
         stage('Docker push') {
             steps {
                 script {
-                    docker.withRegistry('https://730335550052.dkr.ecr.ap-south-1.amazonaws.com', 'ecr:us-east-1:AWS_CRED') {
+                    docker.withRegistry('https://730335550052.dkr.ecr.ap-south-1.amazonaws.com', 'ecr:ap-south-1:AWS_CRED') {
                         docker.image('rajack').push('latest')
                     }
                 }
@@ -39,11 +39,3 @@ pipeline {
         }
     }
 }
-
-stage('Docker push') {
-    docker.withRegistry('https://730335550052.dkr.ecr.ap-south-1.amazonaws.com', 'ecr:us-east-1:AWS_CRED') {
-        docker.image('rajack').push('latest')
-    }
-}
-
-
