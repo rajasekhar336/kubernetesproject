@@ -28,10 +28,10 @@ pipeline {
                     sh 'aws ecr batch-delete-image --repository-name rajack --image-ids imageTag=latest --region ap-south-1'
 
                     // Delete the 'latest' tagged image locally
-                    sh 'docker rmi 471112907684.dkr.ecr.ap-south-1.amazonaws.com/rajack:latest'
+                    sh 'docker rmi 730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:latest'
 
                     // Push both images to ECR
-                    docker.withRegistry('https://471112907684.dkr.ecr.ap-south-1.amazonaws.com/rajack', 'ecr:ap-south-1:AWS_CRED') {
+                    docker.withRegistry('https://730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack', 'ecr:ap-south-1:AWS_CRED') {
                         // Push the build number tagged image
                         app.push("${env.BUILD_NUMBER}")
 
