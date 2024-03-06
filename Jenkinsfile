@@ -33,7 +33,8 @@ pipeline {
         stage('Integrate Jenkins with EKS Cluster and Deploy') {
             steps {
                 withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'my-awesome-cluster', contextName: '', credentialsId: 'KUBERNETES', namespace: 'php-app', serverUrl: 'https://26B03B3671EF237E95E7221E2633D045.gr7.ap-south-1.eks.amazonaws.com']]) {
-                sh 'kubectl apply -f deployment.yaml'
+                    sh 'kubectl apply -f deployment.yaml'
+                    sh "kubectl patch deployment <deployment name> -p \"{\\\"spec\\\":{\\\"template\\\":{\\\"metadata\\\":{\\\"labels\\\":{\\\"build\\\":\\\"${env.BUILD_NUMBER}\\\"}}}}}\""
                 }
             }
         }
