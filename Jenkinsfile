@@ -3,6 +3,11 @@ pipeline {
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
      }
+     environment {
+        AWS_REGION = 'ap-south-1'
+        ECR_URL = '730335550052.dkr.ecr.ap-south-1.amazonaws.com'
+        DOCKER_IMAGE_NAME = 'rajack'
+    }
 
     stages {
         stage('Clone Repository') {
@@ -26,13 +31,14 @@ pipeline {
             steps {
                 script {
                     // Login to ECR
-                    withAWS(region: 'your-ecr-region', credentials: 'your-aws-credentials-id') {
-                        docker.withRegistry('https://your-ecr-url', 'ecr:region') {
+                    withAWS(region: env.AWS_REGION, credentials: 'AWS_CRED') {
+                        docker.withRegistry("https://${env.ECR_URL}", "ecr:${env.AWS_REGION}") {
                             // Tag the Docker image for ECR
-                            docker.image('rajack').tag("your-ecr-url/rajack:${BUILD_NUMBER}")
+                            def taggedImage = "${env.ECR_URL}/${env.DOCKER_IMAGE_NAME}:${BUILD_NUMBER}"
+                            docker.image(env.DOCKER_IMAGE_NAME).tag(taggedImage)
 
                             // Push the Docker image to ECR
-                            docker.image("your-ecr-url/rajack:${BUILD_NUMBER}").push()
+                            docker.image(taggedImage).push()
                         }
                     }
                 }
@@ -40,10 +46,12 @@ pipeline {
         }
         stage('Integrate Jenkins with EKS Cluster and Deploy') {
             steps {
-                withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'demo1', contextName: '', credentialsId: 'KUBERNETES', namespace: 'default', serverUrl: 'https://D1293696801C9405D954FF184F578FFE.gr7.ap-south-1.eks.amazonaws.com']]) {
-                sh 'kubectl apply -f deployment.yaml'
-                }
-            }
+                kubernetesDeploy(
+                    cloud: 'my-awesome-cluster', // Name of the Kubernetes cloud provider configured in Jenkins
+                    kubeconfigId: 'KUBERNETES', // ID of the Kubernetes credentials configured in Jenkins
+                    yaml: 'deployment.yaml' // Path to your deployment YAML file
+                )
+            } 
         }
     }
 }
