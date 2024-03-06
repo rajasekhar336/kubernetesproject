@@ -34,10 +34,11 @@ pipeline {
             steps {
                 script {
                     // Replace the image tag in the deployment file
-                    sh "sed -i 's|image:.*rajack:latest|image: 730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:${env.BUILD_NUMBER}}|g' deployment.yaml"
-                }
+                    sh "sed -i 's|image:.*rajack:latest|image: 730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:${env.BUILD_NUMBER}|g' deployment.yaml"
+		    }
             }
         }
+        
         stage('Integrate Jenkins with EKS Cluster and Deploy') {
             steps {
                 withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'my-awesome-cluster', contextName: '', credentialsId: 'KUBERNETES', namespace: 'php-app', serverUrl: 'https://04653EA3D56968E8A77DC7F3A05CD9D1.gr7.ap-south-1.eks.amazonaws.com']]) {
