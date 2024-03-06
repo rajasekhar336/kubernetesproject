@@ -21,25 +21,14 @@ pipeline {
                 echo 'Empty'
             }
         }
-        stage('Docker push to ECR') {
-            steps {
-                script {
-                    // Delete the 'latest' tagged image from ECR
-                    sh 'aws ecr batch-delete-image --repository-name rajack --image-ids imageTag=latest --region ap-south-1'
-
-                    // Delete the 'latest' tagged image locally
-                    sh 'docker rmi rajack:latest'
-
-                    // Push both images to ECR
-                    docker.withRegistry('https://730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack', 'ecr:ap-south-1:AWS_CRED') {
-                        // Push the build number tagged image
-                        app.push("${env.BUILD_NUMBER}")
-
-                        // Push the 'latest' tagged image
-                        app.push("latest")
-                    }
-                }
-            }
+        stage('Push image') {
+          steps {
+            echo 'Push image is in progress'
+            sh '''
+            docker tag appjs:latest 730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:latest 
+            docker push 730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:latest
+            '''
+          }
         }
         stage('Integrate Jenkins with EKS Cluster and Deploy') {
             steps {
