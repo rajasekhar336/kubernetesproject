@@ -21,14 +21,14 @@ pipeline {
                 echo 'Empty'
             }
         }
-        stage('Push image') {
-          steps {
-            echo 'Push image is in progress'
-            sh '''
-            docker tag rajack:latest 730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:latest 
-            docker push 730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:latest
-            '''
-          }
+        stage('Docker push') {
+            steps {
+                script {
+                    docker.withRegistry('https://730335550052.dkr.ecr.ap-south-1.amazonaws.com', 'ecr:us-east-1:AWS_CRED') {
+                        docker.image('rajack').push('latest')
+                    }
+                }
+            }
         }
         stage('Integrate Jenkins with EKS Cluster and Deploy') {
             steps {
@@ -39,3 +39,11 @@ pipeline {
         }
     }
 }
+
+stage('Docker push') {
+    docker.withRegistry('https://730335550052.dkr.ecr.ap-south-1.amazonaws.com', 'ecr:us-east-1:AWS_CRED') {
+        docker.image('rajack').push('latest')
+    }
+}
+
+
