@@ -21,12 +21,21 @@ pipeline {
                 echo 'Empty'
             }
         }
-        stage('Docker push') {
+        stage('Docker push to ECR') {
             steps {
                 script {
-                    docker.withRegistry('https://730335550052.dkr.ecr.ap-south-1.amazonaws.com', 'ecr:ap-south-1:AWS_CRED') {
-                        docker.image('rajack').push('latest')
+                    docker.withRegistry('https://730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack', 'ecr:ap-south-1:AWS_CRED') {
+                    app.push("${env.BUILD_NUMBER}")
+                    app.push("latest") 
                     }
+                }
+            }
+        }
+        stage('Modify Deployment') {
+            steps {
+                script {
+                    // Replace the image tag in the deployment file
+                    sh "sed -i 's|image:.*rajack:latest|image: 730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:${env.BUILD_NUMBER}}|g' deployment.yaml"
                 }
             }
         }
@@ -39,3 +48,4 @@ pipeline {
         }
     }
 }
+
