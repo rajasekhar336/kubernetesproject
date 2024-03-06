@@ -12,14 +12,14 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: php-app
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
         app.kubernetes.io/name: php-app
     spec:
       containers:
-      - image: 730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:latest
+      - image: 730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:latest 
         imagePullPolicy: Always
         name: php-app
         ports:
