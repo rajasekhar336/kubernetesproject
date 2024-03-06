@@ -25,8 +25,17 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack', 'ecr:ap-south-1:AWS_CRED') {
-                    app.push("${env.BUILD_NUMBER}")
-                    app.push("latest") 
+                        // Check if "latest" tag already exists
+                        def latestTagExists = docker.image("rajack:latest").exists()
+                        
+                        // If "latest" tag exists, tag it with previous build number
+                        if (latestTagExists) {
+                            app.tag("rajack:latest", "${env.BUILD_NUMBER}")
+                            app.push("${env.BUILD_NUMBER}")
+                        }
+                        
+                        // Push the new image as "latest"
+                        app.push("latest")
                     }
                 }
             }
