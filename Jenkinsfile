@@ -25,7 +25,7 @@ pipeline {
             steps {
                 script {
                     // Delete the 'latest' tagged image from ECR
-                    sh 'aws ecr batch-delete-image --repository-name rajack --image-ids imageUri=730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:latest --region ap-south-1'
+                    sh 'aws ecr batch-delete-image --repository-name rajack --image-ids imageTag=latest --region ap-south-1'
 
                     // Delete the 'latest' tagged image locally
                     sh 'docker rmi 730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:latest'
