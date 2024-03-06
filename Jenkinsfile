@@ -33,12 +33,10 @@ pipeline {
         }
         stage('Integrate Jenkins with EKS Cluster and Deploy') {
             steps {
-                kubernetesDeploy(
-                    cloud: 'my-awesome-cluster', // Name of the Kubernetes cloud provider configured in Jenkins
-                    kubeconfigId: 'KUBERNETES', // ID of the Kubernetes credentials configured in Jenkins
-                    yaml: 'deployment.yaml' // Path to your deployment YAML file
-                )
-            } 
+                withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'my-awesome-cluster', contextName: '', credentialsId: 'KUBERNETES', namespace: 'default', serverUrl: 'https://26B03B3671EF237E95E7221E2633D045.gr7.ap-south-1.eks.amazonaws.com']]) {
+                sh 'kubectl apply -f deployment.yaml'
+                }
+            }
         }
     }
 }
