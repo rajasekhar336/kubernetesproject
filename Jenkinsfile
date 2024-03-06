@@ -25,17 +25,21 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack', 'ecr:ap-south-1:AWS_CRED') {
-                        // Check if "latest" tag already exists
-                        def latestTagExists = docker.image("rajack:latest").exists()
-                        
-                        // If "latest" tag exists, tag it with previous build number
-                        if (latestTagExists) {
-                            app.tag("rajack:latest", "${env.BUILD_NUMBER}")
-                            app.push("${env.BUILD_NUMBER}")
+                        // Push the Docker image with build number tag
+                        app.push("${env.BUILD_NUMBER}")
+
+                        // Try to push the image with "latest" tag
+                        try {
+                            app.push("latest")
+                        } catch (Exception e) {
+                            echo "The 'latest' tag already exists in the repository and cannot be overwritten. Pushing as '${env.BUILD_NUMBER}' instead."
+                            // Tag the new image as the latest build number
+                            app.tag("${env.BUILD_NUMBER}", "latest")
+                            // Push the new "latest" tag
+                            app.push("latest")
+                            // Remove the previous "latest" tag
+                            app.removeTag("latest")
                         }
-                        
-                        // Push the new image as "latest"
-                        app.push("latest")
                     }
                 }
             }
