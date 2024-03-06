@@ -19,7 +19,7 @@ spec:
         app.kubernetes.io/name: php-app
     spec:
       containers:
-      - image: 730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:${BUILD_NUMBER}
+      - image: 730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:latest
         imagePullPolicy: Always
         name: php-app
         ports:
