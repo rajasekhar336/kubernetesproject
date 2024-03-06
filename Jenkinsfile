@@ -3,12 +3,6 @@ pipeline {
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
      }
-     environment {
-        AWS_REGION = 'ap-south-1'
-        ECR_URL = '730335550052.dkr.ecr.ap-south-1.amazonaws.com'
-        DOCKER_IMAGE_NAME = 'rajack'
-    }
-
     stages {
         stage('Clone Repository') {
             steps {
@@ -27,19 +21,12 @@ pipeline {
                 echo 'Empty'
             }
         }
-        stage('Push to ECR') {
+        stage('Docker push to ECR') {
             steps {
                 script {
-                    // Login to ECR
-                    withAWS(region: env.AWS_REGION, credentials: 'AWS_CRED') {
-                        docker.withRegistry("https://${env.ECR_URL}", "ecr:${env.AWS_REGION}") {
-                            // Tag the Docker image for ECR
-                            def taggedImage = "${env.ECR_URL}/${env.DOCKER_IMAGE_NAME}:${BUILD_NUMBER}"
-                            docker.image(env.DOCKER_IMAGE_NAME).tag(taggedImage)
-
-                            // Push the Docker image to ECR
-                            docker.image(taggedImage).push()
-                        }
+                    docker.withRegistry('https://730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack', 'ecr:ap-south-1:AWS_CRED') {
+                    app.push("${env.BUILD_NUMBER}")
+                    app.push("latest") 
                     }
                 }
             }
