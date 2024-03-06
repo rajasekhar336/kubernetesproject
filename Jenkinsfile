@@ -25,7 +25,7 @@ pipeline {
           steps {
             echo 'Push image is in progress'
             sh '''
-            docker tag appjs:latest 730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:latest 
+            docker tag rajack:latest 730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:latest 
             docker push 730335550052.dkr.ecr.ap-south-1.amazonaws.com/rajack:latest
             '''
           }
