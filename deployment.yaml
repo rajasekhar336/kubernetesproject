@@ -71,7 +71,7 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/certificate-arn: " "
     alb.ingress.kubernetes.io/healthcheck-path: "/"
-    alb.ingress.kubernetes.io/subnets: "subnet-042237eaf5e114e13,subnet-0930c62e61a4af06d"
+    alb.ingress.kubernetes.io/subnets: "subnet-0ebae3791b3d093de,subnet-00d85c9451e174c8a"
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
 spec:

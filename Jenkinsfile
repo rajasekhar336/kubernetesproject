@@ -43,9 +43,6 @@ pipeline {
             steps {
 <<<<<<< HEAD
                 withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'my-awesome-cluster', contextName: '', credentialsId: 'KUBERNETES', namespace: 'php-app', serverUrl: 'https://A5A55822758724DEF6F2EFD707808F48.gr7.ap-south-1.eks.amazonaws.com']]) {
-=======
-                withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'my-awesome-cluster', contextName: '', credentialsId: 'KUBERNETES', namespace: 'php-app', serverUrl: 'https://04653EA3D56968E8A77DC7F3A05CD9D1.gr7.ap-south-1.eks.amazonaws.com']]) {
->>>>>>> 9243b35ff02b621b0ae126073d0182a106b5b19b
                     sh 'kubectl apply -f deployment.yaml'
                 }
             }
