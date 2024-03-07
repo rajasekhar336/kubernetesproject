@@ -2,179 +2,144 @@
 session_start();
 error_reporting(0);
 include('includes/dbconnection.php');
-if (strlen($_SESSION['agmsaid']==0)) {
+if (strlen($_SESSION['omrsaid']==0)) {
   header('location:logout.php');
   } else{
     if(isset($_POST['submit']))
   {
-    $adminid=$_SESSION['agmsaid'];
-    $aname=$_POST['adminname'];
-  $mobno=$_POST['contactnumber'];
-  
-     $query=mysqli_query($con, "update tbladmin set AdminName ='$aname', MobileNumber='$mobno' where ID='$adminid'");
-    if ($query) {
-    echo "<script>alert('Admin profile has been updated.');</script>";
-    echo "<script>window.location.href='admin-profile.php'</script>";
-  }
-  else
-    {
-      echo "<script>alert('Something Went Wrong. Please try again.');</script>";
-    }
+    $adminid=$_SESSION['omrsaid'];
+    $AName=$_POST['adminname'];
+  $mobno=$_POST['mobilenumber'];
+  $email=$_POST['email'];
+  $sql="update tbladmin set AdminName=:adminname,MobileNumber=:mobilenumber,Email=:email where ID=:aid";
+     $query = $dbh->prepare($sql);
+     $query->bindParam(':adminname',$AName,PDO::PARAM_STR);
+     $query->bindParam(':email',$email,PDO::PARAM_STR);
+     $query->bindParam(':mobilenumber',$mobno,PDO::PARAM_STR);
+     $query->bindParam(':aid',$adminid,PDO::PARAM_STR);
+$query->execute();
+
+        echo '<script>alert("Profile has been updated")</script>';
+     
+
   }
   ?>
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+   
 
-<head>
-  
+    <title>Admin Profile !!</title>
+
+    <!-- vendor css -->
+    <link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="lib/Ionicons/css/ionicons.css" rel="stylesheet">
+    <link href="lib/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
+    <link href="lib/jquery-toggles/toggles-full.css" rel="stylesheet">
+    <link href="lib/highlightjs/github.css" rel="stylesheet">
+    <link href="lib/select2/css/select2.min.css" rel="stylesheet">
+
+    <!-- Amanda CSS -->
+    <link rel="stylesheet" href="css/amanda.css">
+  </head>
+
+  <body>
+ <?php include_once('includes/header.php');
+include_once('includes/sidebar.php');
+
+ ?>
+
  
 
-  <title>Admin-Profile | Art Gallery Management System</title>
+    <div class="am-pagetitle">
+      <h5 class="am-title">Admin Profile</h5>
 
-  <!-- Bootstrap CSS -->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <!-- bootstrap theme -->
-  <link href="css/bootstrap-theme.css" rel="stylesheet">
-  <!--external css-->
-  <!-- font icon -->
-  <link href="css/elegant-icons-style.css" rel="stylesheet" />
-  <link href="css/font-awesome.min.css" rel="stylesheet" />
-  <!-- Custom styles -->
-  <link href="css/style.css" rel="stylesheet">
-  <link href="css/style-responsive.css" rel="stylesheet" />
+    </div><!-- am-pagetitle -->
 
-</head>
+    <div class="am-mainpanel">
+      <div class="am-pagebody">
 
-<body>
-  <!-- container section start -->
-  <section id="container" class="">
-    <!--header start-->
-   <?php include_once('includes/header.php');?>
-    <!--header end-->
+      
 
-    <!--sidebar start-->
-<?php include_once('includes/sidebar.php');?>
-    <!--sidebar end-->
+        <div class="row row-sm mg-t-20">
+          <div class="col-xl-12">
+            <div class="card pd-20 pd-sm-40 form-layout form-layout-4">
+              <h6 class="card-body-title">Admin Profile</h6>
+               <form id="basic-form" method="post">
+                <?php
 
-    <!--main content start-->
-    <section id="main-content">
-      <section class="wrapper">
-        <div class="row">
-          <div class="col-lg-12">
-            <h3 class="page-header"><i class="fa fa-user-md"></i> Profile</h3>
-            <ol class="breadcrumb">
-              <li><i class="fa fa-home"></i><a href="dashboard.php">Home</a></li>
-              <li><i class="icon_documents_alt"></i>Pages</li>
-              <li><i class="fa fa-user-md"></i>Profile</li>
-            </ol>
-          </div>
-        </div>
-        <div class="row">
-          <!-- profile-widget -->
-       
-        <!-- page start-->
-        <div class="row">
-          <div class="col-lg-12">
-            <section class="panel">
-              <header class="panel-heading tab-bg-info">
-                <ul class="nav nav-tabs">
-                 
-                 
-                  <li class="">
-                    <a data-toggle="tab" href="#edit-profile">
-                                          <i class="icon-envelope"></i>
-                                          Edit Profile
-                                      </a>
-                  </li>
-                </ul>
-              </header>
-              <div class="panel-body">
-                <div >
-                 
-                  
-                  <div id="edit-profile" class="tab-pane">
-                    <section class="panel">
-                      <div class="panel-body bio-graph-info">
-                        <h1> Profile Info</h1>
-                        <form class="form-horizontal" role="form" method="post" action="">
-                          
-
-   <?php
-$adminid=$_SESSION['agmsaid'];
-$ret=mysqli_query($con,"select * from tbladmin where ID='$adminid'");
+$sql="SELECT * from  tbladmin";
+$query = $dbh -> prepare($sql);
+$query->execute();
+$results=$query->fetchAll(PDO::FETCH_OBJ);
 $cnt=1;
-while ($row=mysqli_fetch_array($ret)) {
-
-?>
-                          <div class="form-group">
-                            <label class="col-lg-2 control-label">Admin Name</label>
-                            <div class="col-lg-6">
-                              <input class=" form-control" id="adminname" name="adminname" type="text" value="<?php  echo $row['AdminName'];?>">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="col-lg-2 control-label">User Name</label>
-                            <div class="col-lg-6">
-                              <input class=" form-control" id="username" name="username" type="text" value="<?php  echo $row['UserName'];?>"  readonly='true'>
-                            </div>
-                          </div>
-                          
-                          <div class="form-group">
-                            <label class="col-lg-2 control-label">Contact Number</label>
-                            <div class="col-lg-6">
-                              <input class="form-control " id="contactnumber" name="contactnumber" type="text" value="<?php  echo $row['MobileNumber'];?>" required="true">
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <label class="col-lg-2 control-label">Email</label>
-                            <div class="col-lg-6">
-                              <input class="form-control " id="email" name="email" type="email" value="<?php  echo $row['Email'];?>" required="true" readonly='true'>
-                            </div>
-                          </div>
-                         
-                          <?php } ?>
-
-                          <div class="form-group">
-                            <div class="col-lg-offset-2 col-lg-10">
-                              <button type="submit" class="btn btn-primary" name="submit">Update</button>
-                              
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                    </section>
-                  </div>
+if($query->rowCount() > 0)
+{
+foreach($results as $row)
+{               ?>
+              <div class="row">
+                <label class="col-sm-4 form-control-label">Admin Name: <span class="tx-danger">*</span></label>
+                <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                  <input type="text" name="adminname" value="<?php  echo $row->AdminName;?>" class="form-control" required='true'>
+                </div>
+              </div><!-- row -->
+              <div class="row mg-t-20">
+                <label class="col-sm-4 form-control-label">User Name: <span class="tx-danger">*</span></label>
+                <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                  <input type="text" name="username" value="<?php  echo $row->UserName;?>" class="form-control" readonly="true">
                 </div>
               </div>
-            </section>
-          </div>
-        </div>
+              <div class="row mg-t-20">
+                <label class="col-sm-4 form-control-label">Contact Number: <span class="tx-danger">*</span></label>
+                <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                  <input type="text" name="mobilenumber" value="<?php  echo $row->MobileNumber;?>"  class="form-control" maxlength='10' required='true'>
+                </div>
+              </div>
+              <div class="row mg-t-20">
+                <label class="col-sm-4 form-control-label">Email: <span class="tx-danger">*</span></label>
+                <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                  <input type="email" name="email" value="<?php  echo $row->Email;?>" class="form-control" required='true'>
+                </div>
+              </div>
+               <div class="row mg-t-20">
+                <label class="col-sm-4 form-control-label">Admin Registration Date: <span class="tx-danger">*</span></label>
+                <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                 <input type="text" name="" value="<?php  echo $row->AdminRegdate;?>" readonly="true" class="form-control">
+                </div>
+              </div>
+              <?php $cnt=$cnt+1;}} ?> 
+              <div class="form-layout-footer mg-t-30">
+             <p style="text-align: center;"><button class="btn btn-info mg-r-5"  name="submit" id="submit">Update</button></p>
+                </form>
+              </div><!-- form-layout-footer -->
+            </div><!-- card -->
+          </div><!-- col-6 -->
+        
+        </div><!-- row -->
 
-        <!-- page end-->
-      </section>
-    </section>
-    <!--main content end-->
-    <?php include_once('includes/footer.php');?>
-  </section>
-  <!-- container section end -->
-  <!-- javascripts -->
-  <script src="js/jquery.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <!-- nice scroll -->
-  <script src="js/jquery.scrollTo.min.js"></script>
-  <script src="js/jquery.nicescroll.js" type="text/javascript"></script>
-  <!-- jquery knob -->
-  <script src="assets/jquery-knob/js/jquery.knob.js"></script>
-  <!--custome script for all page-->
-  <script src="js/scripts.js"></script>
 
-  <script>
-    //knob
-    $(".knob").knob();
-  </script>
+      </div><!-- am-pagebody -->
+     <?php include_once('includes/footer.php');?>
+    </div><!-- am-mainpanel -->
 
+    <script src="lib/jquery/jquery.js"></script>
+    <script src="lib/popper.js/popper.js"></script>
+    <script src="lib/bootstrap/bootstrap.js"></script>
+    <script src="lib/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
+    <script src="lib/jquery-toggles/toggles.min.js"></script>
+    <script src="lib/highlightjs/highlight.pack.js"></script>
+    <script src="lib/select2/js/select2.min.js"></script>
 
-</body>
+    <script src="js/amanda.js"></script>
+    <script>
+      $(function(){
+        'use strict';
 
+        $('.select2').select2({
+          minimumResultsForSearch: Infinity
+        });
+      })
+    </script>
+  </body>
 </html>
 <?php }  ?>

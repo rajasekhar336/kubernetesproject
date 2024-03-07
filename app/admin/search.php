@@ -2,154 +2,164 @@
 session_start();
 error_reporting(0);
 include('includes/dbconnection.php');
-if (strlen($_SESSION['agmsaid']==0)) {
+if (strlen($_SESSION['omrsaid']==0)) {
   header('location:logout.php');
   } else{
-
 
 
   ?>
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+   
 
-<head>
-  
-  <link rel="shortcut icon" href="img/favicon.png">
+    <title>Online Marriage Registration System || Search Marriage Application</title>
 
-  <title>Search Enquiry | Art Gallery Management System</title>
+    <!-- vendor css -->
+    <link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="lib/Ionicons/css/ionicons.css" rel="stylesheet">
+    <link href="lib/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
+    <link href="lib/jquery-toggles/toggles-full.css" rel="stylesheet">
+    <link href="lib/highlightjs/github.css" rel="stylesheet">
+    <link href="lib/datatables/jquery.dataTables.css" rel="stylesheet">
+    <link href="lib/select2/css/select2.min.css" rel="stylesheet">
 
-  <!-- Bootstrap CSS -->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <!-- bootstrap theme -->
-  <link href="css/bootstrap-theme.css" rel="stylesheet">
-  <!--external css-->
-  <!-- font icon -->
-  <link href="css/elegant-icons-style.css" rel="stylesheet" />
-  <link href="css/font-awesome.min.css" rel="stylesheet" />
-  <!-- Custom styles -->
-  <link href="css/style.css" rel="stylesheet">
-  <link href="css/style-responsive.css" rel="stylesheet" />
+    <!-- Amanda CSS -->
+    <link rel="stylesheet" href="css/amanda.css">
+  </head>
 
-</head>
+  <body>
 
-<body>
-  <!-- container section start -->
-  <section id="container" class="">
-    <!--header start-->
-    <?php include_once('includes/header.php');?>
-    <!--header end-->
+<?php include_once('includes/header.php');
+include_once('includes/sidebar.php');
 
-    <!--sidebar start-->
-    <?php include_once('includes/sidebar.php');?>
+ ?>
 
-    <!--main content start-->
-    <section id="main-content">
-      <section class="wrapper">
-        <div class="row">
-          <div class="col-lg-12">
-            <h3 class="page-header"><i class="fa fa-table"></i> Search Enquiry</h3>
-            <ol class="breadcrumb">
-              <li><i class="fa fa-home"></i><a href="dashboard.php">Home</a></li>
-              <li><i class="fa fa-table"></i>Enquiry</li>
-              <li><i class="fa fa-th-list"></i>Search Enquiry</li>
-            </ol>
-          </div>
-        </div>
-        <!-- page start-->
-        <div class="row">
-          <div class="col-sm-12">
-            <section class="panel">
-              <header class="panel-heading">
-                Search Enquiry
-  <form class="form-horizontal " name="search" method="post" action="" enctype="multipart/form-data">
-                
-                  <div class="form-group">
-                    <label class="col-sm-5 control-label">Search by Enquiry Number / Name / Mobile No.</label>
-                    <div class="col-sm-7">
-                      <input class="form-control" id="searchdata" name="searchdata"  type="text" required="true">
-                    </div>
-                  </div>
-               
-                 <p style="text-align: center;"> <button type="submit" name="search" class="btn btn-primary">Submit</button></p>
+
+    <div class="am-pagetitle">
+      <h5 class="am-title">Search Marriage Application</h5>
+     
+    </div><!-- am-pagetitle -->
+
+    <div class="am-mainpanel">
+      <div class="am-pagebody">
+
+        <div class="card pd-20 pd-sm-40">
+          <h6 class="card-body-title">Search Marriage Application</h6>
+        <form id="basic-form" method="post" enctype="multipart/form-data">
+              
+              <div class="row">
+                <label class="col-sm-4 form-control-label">Search by Reg Number: <span class="tx-danger">*</span></label>
+                <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                  <input type="text" name="searchdata" value="" class="form-control" required='true'>
+                </div>
+              </div><!-- row -->
+             
+             
+             <div class="form-layout-footer mg-t-30">
+             <p style="text-align: center;"><button class="btn btn-info mg-r-5"  name="search" id="search">Submit</button></p>
                 </form>
 
-              </header>
-
-<?php
+          <div class="table-wrapper" style="padding-top: 20px">
+             <?php
 if(isset($_POST['search']))
 { 
 
 $sdata=$_POST['searchdata'];
   ?>
-  <h4 align="center">Result against "<?php echo $sdata;?>" keyword </h4> 
-              <table class="table">
-                <thead>
-                                        <tr>
-                                            <tr>
-                  <th>S.NO</th>
-            
-                 
-                    <th>Enquiry Number</th>
-                    <th>Full Name</th>
-                    <th>Mobile Number</th>
-                    <th>Enquiry Date</th>
-                   
-                          <th>Action</th>
-                </tr>
-                                        </tr>
-                                        </thead>
-               <?php
-$ret=mysqli_query($con,"select *from  tblenquiry where (EnquiryNumber like '%$sdata%' || FullName like '%$sdata%' || MobileNumber like '%$sdata%')");
-$num=mysqli_num_rows($ret);
-if($num>0){
-$cnt=1;
-while ($row=mysqli_fetch_array($ret)) {
-
-?>
-              
+  <h4 align="center">Result against "<?php echo $sdata;?>" keyword </h4>  
+            <table id="datatable1" class="table display responsive nowrap">
+              <thead>
                 <tr>
-                  <td><?php echo $cnt;?></td>
-            
-                 
-                  <td><?php  echo $row['EnquiryNumber'];?></td>
-                  <td><?php  echo $row['FullName'];?></td>
-                  <td><?php  echo $row['MobileNumber'];?></td>
-                  <td><?php  echo $row['EnquiryDate'];?></td>
-                  <td><a href="view-enquiry-detail.php?viewid=<?php echo $row['ID'];?>" class="btn btn-success">View Details</a></td>
+                  <th class="wd-15p">S.No</th>
+                
+                  <th class="wd-15p">Reg Number</th>
+                  <th class="wd-20p">Husband Name</th>
+                  
+                  <th class="wd-10p">Date of Marriage</th>
+                  <th class="wd-10p">Status</th>
+                  <th class="wd-25p">Action</th>
                 </tr>
-                <?php 
+              </thead>
+              <tbody>
+                <?php
+$sql="SELECT * from tblregistration where RegistrationNumber like '$sdata%'";
+$query = $dbh -> prepare($sql);
+$query->execute();
+$results=$query->fetchAll(PDO::FETCH_OBJ);
+
+$cnt=1;
+if($query->rowCount() > 0)
+{
+foreach($results as $row)
+{               ?>
+                <tr>
+                  <td><?php echo htmlentities($cnt);?></td>
+                  <td><?php  echo htmlentities($row->RegistrationNumber);?></td>
+                  <td><?php  echo htmlentities($row->HusbandName);?></td>
+                  <td><?php  echo htmlentities($row->DateofMarriage);?></td>
+                <?php if($row->Status==""){ ?>
+
+                     <td><?php echo "Still Pending"; ?></td>
+<?php } else { ?>                  <td><?php  echo htmlentities($row->Status);?>
+                  </td>
+                  <?php } ?>
+                  <td><a href="view-marriage-application-detail.php?viewid=<?php echo htmlentities ($row->ID);?>"><i class="fa fa-eye" aria-hidden="true"></i></a></td>
+                </tr>
+             
+              </tbody>
+              <?php 
 $cnt=$cnt+1;
 } } else { ?>
   <tr>
-    <td colspan="8"> No record found against this search</td>
+    <td colspan="8"> No record found against this date</td>
 
   </tr>
-   
-<?php } }?>
-              </table>
-            </section>
-          </div>
-       
-        </div>
-       
-        <!-- page end-->
-      </section>
-    </section>
-    <!--main content end-->
-    <?php include_once('includes/footer.php');?>
-  </section>
-  <!-- container section end -->
-  <!-- javascripts -->
-  <script src="js/jquery.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <!-- nicescroll -->
-  <script src="js/jquery.scrollTo.min.js"></script>
-  <script src="js/jquery.nicescroll.js" type="text/javascript"></script>
-  <!--custome script for all page-->
-  <script src="js/scripts.js"></script>
+  <?php } }?>
+            </table>
+          </div><!-- table-wrapper -->
+        </div><!-- card -->
 
+    
+      </div><!-- am-pagebody -->
+     <?php include_once('includes/footer.php');?>
+    </div><!-- am-mainpanel -->
 
-</body>
+    <script src="lib/jquery/jquery.js"></script>
+    <script src="lib/popper.js/popper.js"></script>
+    <script src="lib/bootstrap/bootstrap.js"></script>
+    <script src="lib/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
+    <script src="lib/jquery-toggles/toggles.min.js"></script>
+    <script src="lib/highlightjs/highlight.pack.js"></script>
+    <script src="lib/datatables/jquery.dataTables.js"></script>
+    <script src="lib/datatables-responsive/dataTables.responsive.js"></script>
+    <script src="lib/select2/js/select2.min.js"></script>
 
+    <script src="js/amanda.js"></script>
+    <script>
+      $(function(){
+        'use strict';
+
+        $('#datatable1').DataTable({
+          responsive: true,
+          language: {
+            searchPlaceholder: 'Search...',
+            sSearch: '',
+            lengthMenu: '_MENU_ items/page',
+          }
+        });
+
+        $('#datatable2').DataTable({
+          bLengthChange: false,
+          searching: false,
+          responsive: true
+        });
+
+        // Select2
+        $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
+
+      });
+    </script>
+  </body>
 </html>
 <?php }  ?>

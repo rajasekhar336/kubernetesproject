@@ -2,263 +2,165 @@
 session_start();
 error_reporting(0);
 include('includes/dbconnection.php');
-if (strlen($_SESSION['agmsaid']==0)) {
+if (strlen($_SESSION['omrsaid']==0)) {
   header('location:logout.php');
-  } 
+  } else{
 
 
-
-
-?>
+  ?>
 <!DOCTYPE html>
 <html lang="en">
+  <head>
 
-<head>
-  
-  
+    <title>Amanda Responsive Bootstrap 4 Admin Template</title>
 
-  <title>Art Gallery Management System - Admin Dashboard</title>
+    <!-- vendor css -->
+    <link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="lib/Ionicons/css/ionicons.css" rel="stylesheet">
+    <link href="lib/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet">
+    <link href="lib/jquery-toggles/toggles-full.css" rel="stylesheet">
+    <link href="lib/rickshaw/rickshaw.min.css" rel="stylesheet">
 
-  <!-- Bootstrap CSS -->
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <!-- bootstrap theme -->
-  <link href="css/bootstrap-theme.css" rel="stylesheet">
-  <!--external css-->
-  <!-- font icon -->
-  <link href="css/elegant-icons-style.css" rel="stylesheet" />
-  <link href="css/font-awesome.min.css" rel="stylesheet" />
-  <!-- full calendar css-->
-  <link href="assets/fullcalendar/fullcalendar/bootstrap-fullcalendar.css" rel="stylesheet" />
-  <link href="assets/fullcalendar/fullcalendar/fullcalendar.css" rel="stylesheet" />
-  <!-- easy pie chart-->
-  <link href="assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css" media="screen" />
-  <!-- owl carousel -->
-  <link rel="stylesheet" href="css/owl.carousel.css" type="text/css">
-  <link href="css/jquery-jvectormap-1.2.2.css" rel="stylesheet">
-  <!-- Custom styles -->
-  <link rel="stylesheet" href="css/fullcalendar.css">
-  <link href="css/widgets.css" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet">
-  <link href="css/style-responsive.css" rel="stylesheet" />
-  <link href="css/xcharts.min.css" rel=" stylesheet">
-  <link href="css/jquery-ui-1.10.4.min.css" rel="stylesheet">
-  <!-- =======================================================
-    Theme Name: NiceAdmin
-    Theme URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-    Author: BootstrapMade
-    Author URL: https://bootstrapmade.com
-  ======================================================= -->
-</head>
+    <!-- Amanda CSS -->
+    <link rel="stylesheet" href="css/amanda.css">
+  </head>
 
-<body>
-  <!-- container section start -->
-  <section id="container" class="">
+  <body>
 
+    <?php include_once('includes/header.php');?>
 
- <?php include_once('includes/header.php');?>
-    <!--header end-->
+   <?php include_once('includes/sidebar.php');?>
 
-    <!--sidebar start-->
-    <?php include_once('includes/sidebar.php');?>
-    <!--sidebar end-->
-
-    <!--main content start-->
-    <section id="main-content">
-      <section class="wrapper">
-        <!--overview start-->
-        <div class="row">
-          <div class="col-lg-12">
-            <h3 class="page-header"><i class="fa fa-laptop"></i> Dashboard</h3>
-            <ol class="breadcrumb">
-              <li><i class="fa fa-home"></i><a href="dashboard.php">Home</a></li>
-              <li><i class="fa fa-laptop"></i>Dashboard</li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <div class="info-box green-bg">
-              <?php $query=mysqli_query($con,"Select * from tblartist");
-$artcount=mysqli_num_rows($query);
-?>
-             <i class="fa fa-user"></i>
-              <div class="count"><?php echo $artcount;?></div>
-              <div class="title"> <a class="dropdown-item" href="manage-artist.php">Total Artist</a></div>
-            </div>
-            <!--/.info-box-->
-          </div>
-          <!--/.col-->
-
-          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <div class="info-box brown-bg">
-              <?php $query1=mysqli_query($con,"Select * from tblenquiry where Status='' || Status is null");
-$uenqcount=mysqli_num_rows($query1);
-?>
-              <i class="fa fa-file"></i>
-              <div class="count"><?php echo $uenqcount;?></div>
-              <div class="title"> <a class="dropdown-item" href="unanswer-enquiry.php">Total Unanswer Enquiry</a></div>
-            </div>
-            <!--/.info-box-->
-          </div>
-          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <div class="info-box brown-bg">
-              <?php $query1=mysqli_query($con,"Select * from tblenquiry where Status='Answer'");
-$aenqcount=mysqli_num_rows($query1);
-?>
-              <i class="fa fa-file"></i>
-              <div class="count"><?php echo $aenqcount;?></div>
-              <div class="title"> <a class="dropdown-item" href="answer-enquiry.php">Total Answer Enquiry</a></div>
-            </div>
-            <!--/.info-box-->
-          </div>
-          <!--/.col-->
-
+    <div class="am-mainpanel">
+      <div class="am-pagetitle">
+        <h5 class="am-title">Dashboard</h5>
        
-          <!--/.col-->
+      </div><!-- am-pagetitle -->
 
-         
+<div class="am-pagebody">
+        <div class="row row-sm">
+          <div class="col-lg-4">
+            <?php 
+$sql ="SELECT ID from tblregistration where Status is null ";
+$query = $dbh -> prepare($sql);
+$query->execute();
+$results=$query->fetchAll(PDO::FETCH_OBJ);
+$totalnewapp=$query->rowCount();
+?>
+            <div class="card">
+              <div id="rs1" class="wd-100p ht-200"></div>
+              <div class="overlay-body pd-x-20 pd-t-20">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <h6 class="tx-12 tx-uppercase tx-inverse tx-bold mg-b-5">Total</h6>
+                    <p class="tx-12">New Application</p>
+                  </div>
+                  <a href="new-marriage-application.php" class="tx-gray-600 hover-info"><i class="icon ion-more tx-16 lh-0"></i></a>
+                </div><!-- d-flex -->
+                <h2 class="mg-b-5 tx-inverse tx-lato"><?php echo htmlentities($totalnewapp);?></h2>
+             
+              </div>
+            </div><!-- card -->
+          </div><!-- col-4 -->
+          <div class="col-lg-4 mg-t-15 mg-sm-t-20 mg-lg-t-0">
+             <?php 
+$sql ="SELECT ID from tblregistration where Status='Verified' ";
+$query = $dbh -> prepare($sql);
+$query->execute();
+$results=$query->fetchAll(PDO::FETCH_OBJ);
+$totalverapp=$query->rowCount();
+?>
+            <div class="card">
+              <div id="rs2" class="wd-100p ht-200"></div>
+              <div class="overlay-body pd-x-20 pd-t-20">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <h6 class="tx-12 tx-uppercase tx-inverse tx-bold mg-b-5">Total</h6>
+                    <p class="tx-12">Verified Application</p>
+                  </div>
+                  <a href="verified-marriage-application.php" class="tx-gray-600 hover-info"><i class="icon ion-more tx-16 lh-0"></i></a>
+                </div><!-- d-flex -->
+                <h2 class="mg-b-5 tx-inverse tx-lato"><?php echo htmlentities($totalverapp);?></h2>
+               
+              </div>
+            </div><!-- card -->
+          </div><!-- col-4 -->
+          <div class="col-lg-4 mg-t-15 mg-sm-t-20 mg-lg-t-0">
+            <?php 
+$sql ="SELECT ID from tblregistration where Status='Rejected' ";
+$query = $dbh -> prepare($sql);
+$query->execute();
+$results=$query->fetchAll(PDO::FETCH_OBJ);
+$totalrejapp=$query->rowCount();
+?>
+            <div class="card">
+              <div id="rs3" class="wd-100p ht-200"></div>
+              <div class="overlay-body pd-x-20 pd-t-20">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <h6 class="tx-12 tx-uppercase tx-inverse tx-bold mg-b-5">Total</h6>
+                    <p class="tx-12">Rejected Application</p>
+                  </div>
+                  <a href="rejected-marriage-application.php" class="tx-gray-600 hover-info"><i class="icon ion-more tx-16 lh-0"></i></a>
+                </div><!-- d-flex -->
+                <h2 class="mg-b-5 tx-inverse tx-lato"><?php echo htmlentities($totalrejapp);?></h2>
+               
+              </div>
+            </div><!-- card -->
+          </div><!-- col-4 -->
+</div>
+<div class="row row-sm" style="margin-top: 1%">
+       <div class="col-lg-4 mg-t-15 mg-sm-t-20 mg-lg-t-0">
+            <?php 
+$sql ="SELECT ID from tblregistration ";
+$query = $dbh -> prepare($sql);
+$query->execute();
+$results=$query->fetchAll(PDO::FETCH_OBJ);
+$totalreg=$query->rowCount();
+?>
+            <div class="card">
+              <div id="rs3" class="wd-100p ht-200"></div>
+              <div class="overlay-body pd-x-20 pd-t-20">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <h6 class="tx-12 tx-uppercase tx-inverse tx-bold mg-b-5">Total</h6>
+                    <p class="tx-12">Total Application</p>
+                  </div>
+                  <a href="all-marriage-application.php" class="tx-gray-600 hover-info"><i class="icon ion-more tx-16 lh-0"></i></a>
+                </div><!-- d-flex -->
+                <h2 class="mg-b-5 tx-inverse tx-lato"><?php echo htmlentities($totalreg);?></h2>
+               
+              </div>
+            </div><!-- card -->
+          </div><!-- col-4 -->
+
+
+
         </div>
-        <div class="row">
-             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <div class="info-box dark-bg">
-              <?php $query2=mysqli_query($con,"Select * from tblarttype");
-$artcount=mysqli_num_rows($query2);
-?>
-              <i class="fa fa-file"></i>
-              <div class="count"><?php echo $artcount;?></div>
-             <div class="title"> <a class="dropdown-item" href="manage-art-type.php">Total Art Type</a></div>
-            </div>
-            <!--/.info-box-->
-          </div>
-          <!--/.col-->
-
-          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <div class="info-box brown-bg">
-              <?php $query1=mysqli_query($con,"Select * from tblartmedium");
-$amcount=mysqli_num_rows($query1);
-?>
-              <i class="fa fa-file"></i>
-              <div class="count"><?php echo $amcount;?></div>
-              <div class="title"> <a class="dropdown-item" href="manage-art-medium.php">Total Art Medium</a></div>
-            </div>
-            <!--/.info-box-->
-          </div>
-          <!--/.col-->
-
-          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <div class="info-box dark-bg">
-              <?php $query2=mysqli_query($con,"Select * from tblartproduct");
-$apcount=mysqli_num_rows($query2);
-?>
-              <i class="fa fa-file"></i>
-              <div class="count"><?php echo $apcount;?></div>
-             <div class="title"> <a class="dropdown-item" href="manage-art-product.php">Total Art Product</a></div>
-            </div>
-            <!--/.info-box-->
-          </div>
-          <!--/.col-->
-
-         
-        </div>
-        <!--/.row-->
-<?php include_once('includes/footer.php');?>
 
 
-      </section>
-     
-    </section>
-    <!--main content end-->
-  </section>
-  <!-- container section start -->
 
-  <!-- javascripts -->
-  <script src="js/jquery.js"></script>
-  <script src="js/jquery-ui-1.10.4.min.js"></script>
-  <script src="js/jquery-1.8.3.min.js"></script>
-  <script type="text/javascript" src="js/jquery-ui-1.9.2.custom.min.js"></script>
-  <!-- bootstrap -->
-  <script src="js/bootstrap.min.js"></script>
-  <!-- nice scroll -->
-  <script src="js/jquery.scrollTo.min.js"></script>
-  <script src="js/jquery.nicescroll.js" type="text/javascript"></script>
-  <!-- charts scripts -->
-  <script src="assets/jquery-knob/js/jquery.knob.js"></script>
-  <script src="js/jquery.sparkline.js" type="text/javascript"></script>
-  <script src="assets/jquery-easy-pie-chart/jquery.easy-pie-chart.js"></script>
-  <script src="js/owl.carousel.js"></script>
-  <!-- jQuery full calendar -->
-  <<script src="js/fullcalendar.min.js"></script>
-    <!-- Full Google Calendar - Calendar -->
-    <script src="assets/fullcalendar/fullcalendar/fullcalendar.js"></script>
-    <!--script for this page only-->
-    <script src="js/calendar-custom.js"></script>
-    <script src="js/jquery.rateit.min.js"></script>
-    <!-- custom select -->
-    <script src="js/jquery.customSelect.min.js"></script>
-    <script src="assets/chart-master/Chart.js"></script>
+      </div><!-- am-pagebody -->
+     <?php include_once('includes/footer.php');?>
+    </div><!-- am-mainpanel -->
 
-    <!--custome script for all page-->
-    <script src="js/scripts.js"></script>
-    <!-- custom script for this page-->
-    <script src="js/sparkline-chart.js"></script>
-    <script src="js/easy-pie-chart.js"></script>
-    <script src="js/jquery-jvectormap-1.2.2.min.js"></script>
-    <script src="js/jquery-jvectormap-world-mill-en.js"></script>
-    <script src="js/xcharts.min.js"></script>
-    <script src="js/jquery.autosize.min.js"></script>
-    <script src="js/jquery.placeholder.min.js"></script>
-    <script src="js/gdp-data.js"></script>
-    <script src="js/morris.min.js"></script>
-    <script src="js/sparklines.js"></script>
-    <script src="js/charts.js"></script>
-    <script src="js/jquery.slimscroll.min.js"></script>
-    <script>
-      //knob
-      $(function() {
-        $(".knob").knob({
-          'draw': function() {
-            $(this.i).val(this.cv + '%')
-          }
-        })
-      });
+    <script src="lib/jquery/jquery.js"></script>
+    <script src="lib/popper.js/popper.js"></script>
+    <script src="lib/bootstrap/bootstrap.js"></script>
+    <script src="lib/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
+    <script src="lib/jquery-toggles/toggles.min.js"></script>
+    <script src="lib/d3/d3.js"></script>
+    <script src="lib/rickshaw/rickshaw.min.js"></script>
+    <script src="http://maps.google.com/maps/api/js?key=AIzaSyAEt_DBLTknLexNbTVwbXyq2HSf2UbRBU8"></script>
+    <script src="lib/gmaps/gmaps.js"></script>
+    <script src="lib/Flot/jquery.flot.js"></script>
+    <script src="lib/Flot/jquery.flot.pie.js"></script>
+    <script src="lib/Flot/jquery.flot.resize.js"></script>
+    <script src="lib/flot-spline/jquery.flot.spline.js"></script>
 
-      //carousel
-      $(document).ready(function() {
-        $("#owl-slider").owlCarousel({
-          navigation: true,
-          slideSpeed: 300,
-          paginationSpeed: 400,
-          singleItem: true
-
-        });
-      });
-
-      //custom select box
-
-      $(function() {
-        $('select.styled').customSelect();
-      });
-
-      /* ---------- Map ---------- */
-      $(function() {
-        $('#map').vectorMap({
-          map: 'world_mill_en',
-          series: {
-            regions: [{
-              values: gdpData,
-              scale: ['#000', '#000'],
-              normalizeFunction: 'polynomial'
-            }]
-          },
-          backgroundColor: '#eef3f7',
-          onLabelShow: function(e, el, code) {
-            el.html(el.html() + ' (GDP - ' + gdpData[code] + ')');
-          }
-        });
-      });
-    </script>
-
-</body>
-
+    <script src="js/amanda.js"></script>
+    <script src="js/ResizeSensor.js"></script>
+    <script src="js/dashboard.js"></script>
+  </body>
 </html>
+<?php }  ?>

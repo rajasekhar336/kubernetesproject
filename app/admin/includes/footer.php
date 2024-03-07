@@ -1,5 +1,4 @@
- <div class="text-right">
-        <div class="credits">
-        <p>Art Gallery Management System.</p>
-        </div>
-      </div>
+<div class="am-footer">
+        <span style="color: blue">Copyright &copy;. Online Marriage Registration System</span>
+      
+      </div><!-- am-footer -->
