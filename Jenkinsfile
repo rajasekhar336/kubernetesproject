@@ -41,7 +41,6 @@ pipeline {
         
         stage('Integrate Jenkins with EKS Cluster and Deploy') {
             steps {
-<<<<<<< HEAD
                 withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'my-awesome-cluster', contextName: '', credentialsId: 'KUBERNETES', namespace: 'php-app', serverUrl: 'https://A5A55822758724DEF6F2EFD707808F48.gr7.ap-south-1.eks.amazonaws.com']]) {
                     sh 'kubectl apply -f deployment.yaml'
                 }
