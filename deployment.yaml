@@ -29,10 +29,6 @@ spec:
         name: php-app
         ports:
         - containerPort: 80
-        lifecycle:
-          preStop:
-            exec:
-              command: ["/bin/sh", "-c", "sleep 30"]
   strategy:
     type: RollingUpdate
     rollingUpdate:
