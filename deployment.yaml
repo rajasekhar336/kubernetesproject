@@ -33,7 +33,7 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 5
-      maxSurge: 0
+      maxSurge: 1
 
 
 ---
