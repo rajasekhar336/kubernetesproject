@@ -14,7 +14,7 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: php-app
-  replicas: 2
+  replicas: 4
   template:
     metadata:
       labels:
@@ -26,11 +26,24 @@ spec:
         name: php-app
         ports:
         - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 1
+      maxUnavailable: 3
       maxSurge: 1
+
 
 ---
 
@@ -58,7 +71,7 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/certificate-arn: " "
     alb.ingress.kubernetes.io/healthcheck-path: "/"
-    alb.ingress.kubernetes.io/subnets: "subnet-0e345cf3f207d6d4a,subnet-0e3d24990c980507f"
+    alb.ingress.kubernetes.io/subnets: "subnet-042237eaf5e114e13,subnet-0930c62e61a4af06d"
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
 spec:
