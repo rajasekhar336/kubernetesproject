@@ -30,7 +30,6 @@ spec:
           preStop:
             exec:
               command: ["/bin/sh", "-c", "sleep 40"]
-        terminationGracePeriodSeconds: 70
         readinessProbe:
           httpGet:
             path: /
@@ -43,6 +42,7 @@ spec:
             port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
+      terminationGracePeriodSeconds: 70  
   strategy:
     type: RollingUpdate
     rollingUpdate:
